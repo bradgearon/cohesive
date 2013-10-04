@@ -133,7 +133,10 @@ This most definitely still applies.  But it should be noted that
 	var exampleView = new ExampleView($('.js-example'));
 
 means and explains nothing.  It is also only readable in the context of the document(s) that use it.  Without type safety, compilation, and completely 
-separated - exactly what dependency is obvious to someone working on the document?
+separated - exactly what dependency is obvious to someone working on the document?  It is also not possible to understand the structural dependencies
+that most definitely exist without fully understanding the behaviour.
+
+
 
 
 
