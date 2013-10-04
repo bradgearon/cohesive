@@ -95,7 +95,7 @@ at one tenth the size.  Etc.
 
 #### Enough about that; about those seven principles:
 
->	1. Do not make any assumptions: Defensive programming techniques should allow for the possibilities that JavaScript may not run, 
+>	+ Do not make any assumptions: Defensive programming techniques should allow for the possibilities that JavaScript may not run, 
 >	  the browser may not support expected methods, the HTML may have changed, unexpected input devices may be in use and other scripts 
 >	  may either not be present or may be encroaching on the global namespace.
 
@@ -106,26 +106,26 @@ Unexpected input devices may be in use.  This is a fundamental shift and brings 
 write code to support browser differences and likewise hardware differences.  It is the job of the device and its web browser to 
 translate handwriting, speech, keyboard layouts, screen metrics.
 
->	2. Find your hooks and relationships, such as IDs and other aspects of the expected HTML.
->	3. Leave traversing individual DOM objects to the experts, such as to the CSS handler built into the browser where possible.
+>	+ Find your hooks and relationships, such as IDs and other aspects of the expected HTML.
+>	+ Leave traversing individual DOM objects to the experts, such as to the CSS handler built into the browser where possible.
 
 Traverse and be merry.  Thou [hast plenty of unused cycles and battery cells](http://en.wikipedia.org/wiki/Sarcasm).  Remember to 
 fully discharge your batteries between charges.  Especially the Lithium ion variety (don't really it will damage them).
 
->	4. Understand browsers and users, particularly how they fail, what assumptions they make, and unusual configurations or usages.
+>	+ Understand browsers and users, particularly how they fail, what assumptions they make, and unusual configurations or usages.
 
 This should be revised for responsiveness and accessiblity.  We should no longer interpret this as perhaps the user has disabled 
 javascript.  We can add something about whether they have connectivity and / or a gpu with nothing to do.
 
->	5. Understand events, including how they 'bubble' and the features of the Event object that is passed to most event handlers.
+>	+ Understand events, including how they 'bubble' and the features of the Event object that is passed to most event handlers.
 
 Please don't focus on plumbing code.  The inner workings of events should be the least of your worries.  Basic understanding is still required.
 
->	6. Play well with other scripts by avoiding global function and variable names. 
+>	+ Play well with other scripts by avoiding global function and variable names. 
 
 Has anyone outside of [Unity3D](http://unity3d.com) intentionally written code in a global scope for production?  Shame on you.  This still applies.
 
->	7. Work for the next developer by using self-explanatory variable and function names, creating logical and readable code, 
+>	+ Work for the next developer by using self-explanatory variable and function names, creating logical and readable code, 
 >	  making dependencies obvious, and commenting any code that still might confuse.
 
 This most definitely still applies.  But it should be noted that 
