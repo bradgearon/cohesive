@@ -67,6 +67,31 @@ Its much too easy to forget the basis for our separation of concerns.  In 2002 t
 javascript was [conceived](http://www.kryogenix.org/code/browser/aqlists/).   Internet Explorer 6 was 
 on its way becoming the most widely used browser.  It followed little standards and is likely one of the
 worst web browsers in the short history of the internet.  This idea of unobtrusiveness was developed to
-mitigate its lack of adherence to standards.  The seven identified principles of 
+mitigate its lack of adherence to standards.  
+
+The [seven identified principles](http://en.wikipedia.org/wiki/Unobtrusive_JavaScript) of unobtrusive javascript:
+
+>	1. Do not make any assumptions: Defensive programming techniques should allow for the possibilities that JavaScript may not run, 
+>	  the browser may not support expected methods, the HTML may have changed, unexpected input devices may be in use and other scripts 
+>	  may either not be present or may be encroaching on the global namespace.
+>	2. Find your hooks and relationships, such as IDs and other aspects of the expected HTML.
+>	3. Leave traversing individual DOM objects to the experts, such as to the CSS handler built into the browser where possible.
+>	4. Understand browsers and users, particularly how they fail, what assumptions they make, and unusual configurations or usages.
+>	5. Understand events, including how they 'bubble' and the features of the Event object that is passed to most event handlers.
+>	6. Play well with other scripts by avoiding global function and variable names. 
+>	7. Work for the next developer by using self-explanatory variable and function names, creating logical and readable code, 
+>	  making dependencies obvious, and commenting any code that still might confuse.
+
+### The Internet Is Evolving
+
+The seven principles defined in 2007 no longer apply.  The web was a much different place and we were writing web pages as 
+parts of a larger web application, tracking state on a server, the now defunct Windows Mobile was our idea of a smartphone, 
+and wap was a relevant term.  The web has changed vastly.  Apple created the iPhone and Google Android.  A few people bought
+a Windows Phone - which is by no means a similar operating system to its ancestor.  IE6 is finally almost dead, 7 is dying, 
+Microsoft has started an open source initiative (the only thing that remains unchanged is the existence of Apple's "Walled Garden";
+and shame on them for that).  Most importantly we are writing web *applications* in one page.  Business logic is sometimes written 
+exlusively in javascript.  Noone uses type attributes on script tags because no other script language is important and thus its
+not required.  Our smartphones outpower the machines we used in 2007 at one tenth the size.
+
 
 
