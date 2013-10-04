@@ -63,11 +63,10 @@ Furthermore:
 
 ### The obvious truth exposed
 
-Its much too easy to forget the basis for our separation of concerns.  In 2002 the idea of unobtrusive 
-javascript was [conceived](http://www.kryogenix.org/code/browser/aqlists/).   Internet Explorer 6 was 
-on its way becoming the most widely used browser.  It followed little standards and is likely one of the
-worst web browsers in the short history of the internet.  This idea of unobtrusiveness was developed to
-mitigate its lack of adherence to standards.  
+In 2002 the idea of unobtrusive javascript was [conceived](http://www.kryogenix.org/code/browser/aqlists/).   
+Internet Explorer 6 was on its way becoming the most widely used browser.  It followed little standards 
+and is likely one of the worst web browsers in the short history of the internet.  This idea of 
+unobtrusiveness was developed to mitigate its lack of adherence to standards.  
 
 The [seven identified principles](http://en.wikipedia.org/wiki/Unobtrusive_JavaScript) of unobtrusive javascript:
 
@@ -86,12 +85,55 @@ The [seven identified principles](http://en.wikipedia.org/wiki/Unobtrusive_JavaS
 
 The seven principles defined in 2007 no longer apply.  The web was a much different place and we were writing web pages as 
 parts of a larger web application, tracking state on a server, the now defunct Windows Mobile was our idea of a smartphone, 
-and wap was a relevant term.  The web has changed vastly.  Apple created the iPhone and Google Android.  A few people bought
-a Windows Phone - which is by no means a similar operating system to its ancestor.  IE6 is finally almost dead, 7 is dying, 
-Microsoft has started an open source initiative (the only thing that remains unchanged is the existence of Apple's "Walled Garden";
-and shame on them for that).  Most importantly we are writing web *applications* in one page.  Business logic is sometimes written 
-exlusively in javascript.  Noone uses type attributes on script tags because no other script language is important and thus its
-not required.  Our smartphones outpower the machines we used in 2007 at one tenth the size.
+and wap was a relevant term.  The web has changed vastly.  Apple created the iPhone and Google (and its contributors) created Android.  
+A few people bought a Windows Phone - which is by no means a similar operating system to its ancestor.  IE6 is finally almost dead, 
+7 is dying, Microsoft has started an open source initiative (the only thing that remains unchanged is the existence of 
+Apple's "Walled Garden"; and shame on them for that).  Most importantly we are writing web *applications* in one page.  
+Business logic is sometimes written exlusively in javascript.  Noone uses type attributes on script tags because no 
+other script language is relevant and thus its not required.  Our smartphones outpower the machines we used in 2007 
+at one tenth the size.  Etc.  
+
+#### Enough about that; about those seven principles:
+
+>	1. Do not make any assumptions: Defensive programming techniques should allow for the possibilities that JavaScript may not run, 
+>	  the browser may not support expected methods, the HTML may have changed, unexpected input devices may be in use and other scripts 
+>	  may either not be present or may be encroaching on the global namespace.
+
+Javascript not running is no longer relevant.  If it doesn't run we may not have a single page let alone a functional web application.
+The HTML may have changed.  If we are looking for ids, classes, traversing the DOM - pretty much if we have written any js and the HTML 
+changes (especially unexpectedly) said js is going to have to change with it.  Tiny code goblins shouldn't be messing around on github.
+Unexpected input devices may be in use.  This is a fundamental shift and brings us (back) to a very important concept: we no longer 
+write code to support browser differences and likewise hardware differences.  It is the job of the device and its web browser to 
+translate handwriting, speech, keyboard layouts, screen metrics.
+
+>	2. Find your hooks and relationships, such as IDs and other aspects of the expected HTML.
+>	3. Leave traversing individual DOM objects to the experts, such as to the CSS handler built into the browser where possible.
+
+Traverse and be merry.  Thou [hast plenty of unused cycles and battery cells](http://en.wikipedia.org/wiki/Sarcasm).  Remember to 
+fully discharge your batteries between charges.  Especially the Lithium ion variety (don't really it will damage them).
+
+>	4. Understand browsers and users, particularly how they fail, what assumptions they make, and unusual configurations or usages.
+
+This should be revised for responsiveness and accessiblity.  We should no longer interpret this as perhaps the user has disabled 
+javascript.  We can add something about whether they have connectivity and / or a gpu with nothing to do.
+
+>	5. Understand events, including how they 'bubble' and the features of the Event object that is passed to most event handlers.
+
+Please don't focus on plumbing code.  The inner workings of events should be the least of your worries.  Basic understanding is still required.
+
+>	6. Play well with other scripts by avoiding global function and variable names. 
+
+Has anyone outside of [Unity3D](http://unity3d.com) intentionally written code in a global scope for production?  Shame on you.  This still applies.
+
+>	7. Work for the next developer by using self-explanatory variable and function names, creating logical and readable code, 
+>	  making dependencies obvious, and commenting any code that still might confuse.
+
+This most definitely still applies.  But it should be noted that 
+
+	var exampleView = new ExampleView($('.js-example'));
+
+means and explains nothing.  It is also only readable in the context of the document(s) that use it.  Without type safety, compilation, and completely 
+separated - exactly what dependency is obvious to someone working on the document?
 
 
 
