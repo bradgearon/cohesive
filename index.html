@@ -16,14 +16,14 @@
     <!-- HEADER -->
     <div id="header_wrap" class="outer">
         <header class="inner">
-          <a id="forkme_banner" href="https://github.com/bradgearon/Cohesive">View on GitHub</a>
+          <a id="forkme_banner" href="https://github.com/bradgearon/cohesive">View on GitHub</a>
 
           <h1 id="project_title">Cohesive</h1>
           <h2 id="project_tagline">WIP Comparison of modern javascript application architecture: debunking the &quot;heavy view&quot; myth floating about with regards to AngularJS to help the interested digest its paradigm shift </h2>
 
             <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/bradgearon/Cohesive/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/bradgearon/Cohesive/tarball/master">Download this project as a tar.gz file</a>
+              <a class="zip_download_link" href="https://github.com/bradgearon/cohesive/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/bradgearon/cohesive/tarball/master">Download this project as a tar.gz file</a>
             </section>
         </header>
     </div>
@@ -205,6 +205,71 @@ that most definitely exist without fully understanding the behaviour.</p>
 
 <hr><h3>
 <a name="html-and-js-are-lonely" class="anchor" href="#html-and-js-are-lonely"><span class="octicon octicon-link"></span></a>HTML and js Are Lonely</h3>
+
+<p>Have you ever written testable, readable, separated code in any other language - in this manner?  Probably (hopefully) not.<br>
+To illustrate this, I've put a few examples together (not exactly the same implementation, but the concepts outlined remain):</p>
+
+<h4>
+<a name="wpf-xaml-and-c" class="anchor" href="#wpf-xaml-and-c"><span class="octicon octicon-link"></span></a>WPF: Xaml and C</h4>
+
+<p><a href="examples/xaml/MainWindow.xaml">MainWindow.xaml</a></p>
+
+<div class="highlight highlight-xml"><pre><span class="nt">&lt;Window</span> <span class="na">x:Class=</span><span class="s">"SeparationOfConcerns.MainWindow"</span>
+        <span class="na">xmlns=</span><span class="s">"http://schemas.microsoft.com/winfx/2006/xaml/presentation"</span>
+        <span class="na">xmlns:x=</span><span class="s">"http://schemas.microsoft.com/winfx/2006/xaml"</span>
+        <span class="nt">&gt;</span>
+  <span class="nt">&lt;Grid</span> <span class="na">Name=</span><span class="s">"exampleGrid"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;Grid.ColumnDefinitions&gt;</span>
+      <span class="nt">&lt;ColumnDefinition</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;ColumnDefinition</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;ColumnDefinition</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/Grid.ColumnDefinitions&gt;</span>
+    <span class="nt">&lt;Rectangle</span> <span class="na">Style=</span><span class="s">"{StaticResource Card}"</span> <span class="na">Grid.Column=</span><span class="s">"0"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;Rectangle</span> <span class="na">Style=</span><span class="s">"{StaticResource Card}"</span> <span class="na">Grid.Column=</span><span class="s">"1"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;Rectangle</span> <span class="na">Style=</span><span class="s">"{StaticResource Card}"</span> <span class="na">Grid.Column=</span><span class="s">"2"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;/Grid&gt;</span>
+<span class="nt">&lt;/Window&gt;</span>
+</pre></div>
+
+<p><a href="examples/xaml/MainWindow.xaml.cs">MainWindow.xaml.cs</a></p>
+
+<div class="highlight highlight-cs"><pre><span class="k">using</span> <span class="nn">System.Windows</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Windows.Media</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Windows.Shapes</span><span class="p">;</span>
+<span class="k">namespace</span> <span class="nn">SeparationOfConcerns</span>
+<span class="p">{</span>
+  <span class="k">public</span> <span class="k">partial</span> <span class="k">class</span> <span class="nc">MainWindow</span> <span class="p">:</span> <span class="n">Window</span>
+  <span class="p">{</span>
+    <span class="k">public</span> <span class="nf">MainWindow</span><span class="p">()</span>
+    <span class="p">{</span>
+      <span class="n">InitializeComponent</span><span class="p">();</span>
+      <span class="n">Init</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Init</span><span class="p">()</span>
+    <span class="p">{</span>
+      <span class="kt">var</span> <span class="n">cardStyle</span> <span class="p">=</span> <span class="n">App</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">Resources</span><span class="p">[</span><span class="s">"Card"</span><span class="p">]</span> <span class="k">as</span> <span class="n">Style</span><span class="p">;</span>
+      <span class="kt">var</span> <span class="n">flippedStyle</span> <span class="p">=</span> <span class="n">App</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">Resources</span><span class="p">[</span><span class="s">"Flipped"</span><span class="p">]</span> <span class="k">as</span> <span class="n">Style</span><span class="p">;</span>
+
+      <span class="kt">var</span> <span class="n">children</span> <span class="p">=</span> <span class="n">VisualTreeHelper</span><span class="p">.</span><span class="n">GetChildrenCount</span><span class="p">(</span><span class="n">exampleGrid</span><span class="p">);</span>
+
+      <span class="k">for</span> <span class="p">(</span><span class="kt">var</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">children</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
+      <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">child</span> <span class="p">=</span> <span class="n">VisualTreeHelper</span><span class="p">.</span><span class="n">GetChild</span><span class="p">(</span><span class="n">exampleGrid</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">as</span> <span class="n">Rectangle</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">child</span> <span class="p">!=</span> <span class="k">null</span> <span class="p">&amp;&amp;</span> <span class="n">cardStyle</span> <span class="p">!=</span> <span class="k">null</span> <span class="p">&amp;&amp;</span> <span class="n">child</span><span class="p">.</span><span class="n">Style</span> <span class="p">==</span> <span class="n">cardStyle</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="n">child</span><span class="p">.</span><span class="n">MouseLeave</span> <span class="p">+=</span> <span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="n">child</span><span class="p">.</span><span class="n">Style</span> <span class="p">=</span> <span class="n">cardStyle</span><span class="p">;</span>
+          <span class="n">child</span><span class="p">.</span><span class="n">MouseEnter</span> <span class="p">+=</span> <span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="n">child</span><span class="p">.</span><span class="n">Style</span> <span class="p">=</span> <span class="n">flippedStyle</span><span class="p">;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>This violates nearly every rule in the book for WPF applications.  It makes no sense.  Rebuttals welcome.</p>
       </section>
     </div>
 
