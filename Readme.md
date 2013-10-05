@@ -5,40 +5,40 @@
 
 Consider the following:
 
+```javascript
 	App.prototype.init = function() {
 		var exampleView = new ExampleView($('.js-example'));
 	}
-
-...
+```
 
 When our app starts we find an arbitrary dom element (or elements) using 
 a *css class* name js-example and use that to create an instance of our ExampleView class.
 
-	ExampleView.prototype.createChildren = function() {
-		this.$card = this.$element.find('.js-card');
-		return this;
-	};
-
-...
+```javascript
+ExampleView.prototype.createChildren = function() {
+	this.$card = this.$element.find('.js-card');
+	return this;
+};
+```
 
 We find children using the *css class* name js-card.
 
-    ExampleView.prototype.enable = function() {
-		this.$card
-            .on('click', this.onClickHandler)        
-       this.$card
-            .addClass('flipped');
+```javascript
+	ExampleView.prototype.enable = function() {
+		this.$card.on('click', this.onClickHandler)        
+		this.$card.addClass('flipped');
 	};
-
-...
+```
 
 Then we add **behaviour** to those dom elements using 
 jquery | zepto | *that other framework* to bind a function
 to our browser's implementation of the normalized 'click' event.
-	
-    ExampleView.prototype.onClick = function(e) {
-        this.$card.toggleClass('flipped');
-    };
+
+```javascript
+ExampleView.prototype.onClick = function(e) {
+   this.$card.toggleClass('flipped');
+};
+```
 
 What makes this a problem:
 
@@ -130,13 +130,16 @@ Has anyone outside of [Unity3D](http://unity3d.com) intentionally written code i
 
 This most definitely still applies.  But it should be noted that 
 
-	var exampleView = new ExampleView($('.js-example'));
-
+```javascript
+var exampleView = new ExampleView($('.js-example'));
+```
 means and explains nothing.  It is also only readable in the context of the document(s) that use it.  Without type safety, compilation, and completely 
 separated - exactly what dependency is obvious to someone working on the document?  It is also not possible to understand the structural dependencies
 that most definitely exist without fully understanding the behaviour.
 
+-------
 
+### HTML and js Are Lonely
 
 
 
