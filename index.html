@@ -42,44 +42,36 @@
 
 <p>Consider the following:</p>
 
-<pre><code>App.prototype.init = function() {
-    var exampleView = new ExampleView($('.js-example'));
-}
-</code></pre>
-
-<p>...</p>
+<div class="highlight highlight-javascript"><pre><span class="nx">App</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">exampleView</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ExampleView</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s1">'.js-example'</span><span class="p">));</span>
+<span class="p">}</span>
+</pre></div>
 
 <p>When our app starts we find an arbitrary dom element (or elements) using 
 a <em>css class</em> name js-example and use that to create an instance of our ExampleView class.</p>
 
-<pre><code>ExampleView.prototype.createChildren = function() {
-    this.$card = this.$element.find('.js-card');
-    return this;
-};
-</code></pre>
-
-<p>...</p>
+<div class="highlight highlight-javascript"><pre><span class="nx">ExampleView</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">createChildren</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">$card</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">$element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">'.js-card'</span><span class="p">);</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
 
 <p>We find children using the <em>css class</em> name js-card.</p>
 
-<pre><code>ExampleView.prototype.enable = function() {
-    this.$card
-        .on('click', this.onClickHandler)        
-   this.$card
-        .addClass('flipped');
-};
-</code></pre>
-
-<p>...</p>
+<div class="highlight highlight-javascript"><pre><span class="nx">ExampleView</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">enable</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">$card</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'click'</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">onClickHandler</span><span class="p">)</span>        
+    <span class="k">this</span><span class="p">.</span><span class="nx">$card</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">'flipped'</span><span class="p">);</span>
+<span class="p">};</span>
+</pre></div>
 
 <p>Then we add <strong>behaviour</strong> to those dom elements using 
 jquery | zepto | <em>that other framework</em> to bind a function
 to our browser's implementation of the normalized 'click' event.</p>
 
-<pre><code>ExampleView.prototype.onClick = function(e) {
-    this.$card.toggleClass('flipped');
-};
-</code></pre>
+<div class="highlight highlight-javascript"><pre><span class="nx">ExampleView</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">onClick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">$card</span><span class="p">.</span><span class="nx">toggleClass</span><span class="p">(</span><span class="s1">'flipped'</span><span class="p">);</span>
+<span class="p">};</span>
+</pre></div>
 
 <p>What makes this a problem:</p>
 
@@ -204,12 +196,15 @@ making dependencies obvious, and commenting any code that still might confuse.</
 
 <p>This most definitely still applies.  But it should be noted that </p>
 
-<pre><code>var exampleView = new ExampleView($('.js-example'));
-</code></pre>
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">exampleView</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ExampleView</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s1">'.js-example'</span><span class="p">));</span>
+</pre></div>
 
 <p>means and explains nothing.  It is also only readable in the context of the document(s) that use it.  Without type safety, compilation, and completely 
 separated - exactly what dependency is obvious to someone working on the document?  It is also not possible to understand the structural dependencies
 that most definitely exist without fully understanding the behaviour.</p>
+
+<hr><h3>
+<a name="html-and-js-are-lonely" class="anchor" href="#html-and-js-are-lonely"><span class="octicon octicon-link"></span></a>HTML and js Are Lonely</h3>
       </section>
     </div>
 
