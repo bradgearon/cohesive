@@ -6,9 +6,9 @@
 Consider the following:
 
 ```javascript
-	App.prototype.init = function() {
-		var exampleView = new ExampleView($('.js-example'));
-	}
+App.prototype.init = function() {
+	var exampleView = new ExampleView($('.js-example'));
+}
 ```
 
 When our app starts we find an arbitrary dom element (or elements) using 
