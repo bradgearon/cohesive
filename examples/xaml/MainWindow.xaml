@@ -1,0 +1,15 @@
+﻿<Window x:Class="SeparationOfConcerns.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		>
+  <Grid Name="exampleGrid">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition />
+      <ColumnDefinition />
+      <ColumnDefinition />
+    </Grid.ColumnDefinitions>
+    <Rectangle Style="{StaticResource Card}" Grid.Column="0" />
+    <Rectangle Style="{StaticResource Card}" Grid.Column="1" />
+    <Rectangle Style="{StaticResource Card}" Grid.Column="2" />
+  </Grid>
+</Window>

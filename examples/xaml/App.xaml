@@ -1,0 +1,17 @@
+﻿<Application
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	x:Class="SeparationOfConcerns.App"
+	StartupUri="MainWindow.xaml">
+  <Application.Resources>
+    <Style x:Key="Card" TargetType="{x:Type Rectangle}">
+      <Setter Property="Width" Value="Auto" />
+      <Setter Property="Height" Value="Auto" />
+      <Setter Property="Margin" Value="20, 40" />
+      <Setter Property="Fill" Value="#FFC0C0C0" />
+    </Style>
+    <Style x:Key="Flipped" BasedOn="{StaticResource Card}" TargetType="{x:Type Rectangle}">
+      <Setter Property="Fill" Value="#FF3C87C6" />
+    </Style>
+  </Application.Resources>
+</Application>
