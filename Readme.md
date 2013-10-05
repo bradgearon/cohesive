@@ -1,7 +1,4 @@
-﻿# DOM Element Behaviour
-## Coupled or Cohesive
-
-### The Problem
+﻿### The Problem
 
 Consider the following:
 
@@ -40,7 +37,7 @@ ExampleView.prototype.onClick = function(e) {
 };
 ```
 
-What makes this a problem:
+###What makes this a problem?
 
 Our code is now directly / functionally dependent on our not only our html's structure, 
 but also the names we choose to use in css.  
@@ -61,7 +58,7 @@ Furthermore:
 + our html is brittle, its structure is completely coupled if we intend to have functional behaviour
 + our markup is intentionally less semantic
 
-### The obvious truth exposed
+### A long time ago, in a land...
 
 In 2002 the idea of unobtrusive javascript was [conceived](http://www.kryogenix.org/code/browser/aqlists/).   
 Internet Explorer 6 was on its way becoming the most widely used browser.  It followed little standards 
@@ -139,7 +136,7 @@ that most definitely exist without fully understanding the behaviour.
 
 -------
 
-### HTML and js Are Lonely
+#### HTML and Javascript Are Lonely
 
 Have you ever written testable, readable, separated code in any other language - in this manner?  Probably (hopefully) not.  
 To illustrate this, I've put a few examples together (not exactly the same implementation, but the concepts outlined remain):
@@ -209,6 +206,8 @@ This violates nearly every rule in the book for WPF applications.  It makes no s
 
 #### Android: XML and Java
 
+[main.xml](http://github.com/bradgearon/cohesive/blob/master/examples/android/res/layout/main.xml)
+
 ```xml 
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
@@ -224,6 +223,8 @@ This violates nearly every rule in the book for WPF applications.  It makes no s
 ```
 
 StyledView extends android.view and exposes the style attribute originally declared.
+
+[Cohesive.java](http://github.com/bradgearon/cohesive/blob/master/examples/android/src/com/example/cohesive_android/Cohesive.java)
 
 ```java
 package com.example.cohesive_android;
@@ -257,22 +258,58 @@ public void onCreate(Bundle savedInstanceState) {
                     return false;
                 }
             });
-
         }
     }
 	}
 }
 ```
 
-CSharp is much more concise...  
-Anonymous delegates or lambda ft (this is [coming in Java 8](http://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html)). 
+Side note: CSharp is much more concise... 
+Anonymous delegates, var, and lambda FTW  (the latter is [coming in Java 8](http://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html)). 
+
 Android's view out of the box won't let you have these wretched cross layer dependencies.
 
 #### Qt: QML and C++
 
 Soon
 
-#### Laravel: Blade (template) and PHP
+---------
+
+Why would we break a bunch of our own rules for the web, but not for any other language or ui framework?  
+Perhaps its the exponentially more difficult (standards) [upgrade process](http://www.ie6countdown.com/).  
+Perhaps its because the browser is a choice more so than your choice operating system's ui framework.
+Likely its a combination of those and attempts to commercialize and (naturally) differentiate the browser -
+that spawned from the (ridiculous) idea that one browser could render documents better than the rest; that
+this platform built for collaboration could be corrupted and made proprietary by deliberately ignoring 
+accepted standards and thus be used as a tool to promote [other products](http://windows.microsoft.com).
+Thankfully thats no longer an issue.
+
+Is it still necessary, then, to use so called "defensive programming techniques"?  Must an application written for the
+web pretend it isn't just some client code running inside of another ui framework?  Does that application need to 
+function with or without its interpreter?
+
+### Modern Web Applications
+
+So yes, [we used to write things like](https://news.ycombinator.com/item?id=5526058)
+
+```html
+<a href=”#” onclick=”doSomething()”>
+```
+
+But, everything broke because of commercialism and bad decisions.   So we bent the rules for the web, until we could 
+overcome the bad decisions and came up with the antipattern that is unobtrusive javascript.  Every other ui framework
+realized since then that declaritive markup is a good thing.  
+
+Thus, now that we can - its definitely time to [move on](http://www.localytics.com/blog/2013/angularjs-at-localytics/).
+
+#### Paradigm Shift;  DOM Elements Inherently have Behaviour (even more in HTML5)
+
+
+
+
+
+
+
 
 
 
