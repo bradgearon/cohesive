@@ -141,5 +141,78 @@ that most definitely exist without fully understanding the behaviour.
 
 ### HTML and js Are Lonely
 
+Have you ever written testable, readable, separated code in any other language - in this manner?  Probably (hopefully) not.  
+To illustrate this, I've put a few examples together (not exactly the same implementation, but the concepts outlined remain):
+
+#### WPF: Xaml and C#
+
+[MainWindow.xaml](examples/xaml/MainWindow.xaml)
+
+```xml 
+<Window x:Class="SeparationOfConcerns.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		>
+  <Grid Name="exampleGrid">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition />
+      <ColumnDefinition />
+      <ColumnDefinition />
+    </Grid.ColumnDefinitions>
+    <Rectangle Style="{StaticResource Card}" Grid.Column="0" />
+    <Rectangle Style="{StaticResource Card}" Grid.Column="1" />
+    <Rectangle Style="{StaticResource Card}" Grid.Column="2" />
+  </Grid>
+</Window>
+```
+
+[MainWindow.xaml.cs](examples/xaml/MainWindow.xaml.cs)
+
+```cs
+using System.Windows;
+using System.Windows.Media;
+using System.Windows.Shapes;
+namespace SeparationOfConcerns
+{
+  public partial class MainWindow : Window
+  {
+    public MainWindow()
+    {
+      InitializeComponent();
+      Init();
+    }
+
+    public void Init()
+    {
+      var cardStyle = App.Current.Resources["Card"] as Style;
+      var flippedStyle = App.Current.Resources["Flipped"] as Style;
+
+      var children = VisualTreeHelper.GetChildrenCount(exampleGrid);
+
+      for (var i = 0; i < children; i++)
+      {
+        var child = VisualTreeHelper.GetChild(exampleGrid, i) as Rectangle;
+
+        if (child != null && cardStyle != null && child.Style == cardStyle)
+        {
+          child.MouseLeave += (o, args) => child.Style = cardStyle;
+          child.MouseEnter += (o, args) => child.Style = flippedStyle;
+        }
+      }
+
+    }
+  }
+}
+```
+
+This violates nearly every rule in the book for WPF applications.  It makes no sense.  Rebuttals welcome.
+
+
+
+
+
+
+
+
 
 
