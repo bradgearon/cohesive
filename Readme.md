@@ -207,6 +207,74 @@ namespace SeparationOfConcerns
 
 This violates nearly every rule in the book for WPF applications.  It makes no sense.  Rebuttals welcome.
 
+#### Android: XML and Java
+
+```xml 
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_margin="20dp"
+        android:layout_height="fill_parent"
+        android:id="@id/mainLayout">
+        <com.example.cohesive_android.StyledView style="@style/Card"/>
+        <com.example.cohesive_android.StyledView style="@style/Card"/>
+        <com.example.cohesive_android.StyledView style="@style/Card"/>
+</LinearLayout>
+```
+
+StyledView extends android.view and exposes the style attribute originally declared.
+
+```java
+package com.example.cohesive_android;
+
+// imports left out for brevity
+public class Cohesive extends Activity {
+@Override
+public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.main);
+
+    Resources themeWrapper = getResources();
+
+    final int flippedColor = themeWrapper.getColor(R.color.Flipped);
+    final int cardColor = themeWrapper.getColor(R.color.Card);
+
+    LinearLayout ll = (LinearLayout) findViewById(R.id.mainLayout);
+    int children = ll.getChildCount();
+
+    for (int i = 0; i < children; i++) {
+        View view = ll.getChildAt(i);
+        if (view instanceof StyledView) {
+            view.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, android.view.MotionEvent motionEvent) {
+                    Drawable background = view.getBackground();
+                    int color = 0;
+                    if (background instanceof ColorDrawable)
+                        color = ((ColorDrawable) background).getColor();
+                    view.setBackgroundColor(color == cardColor ? flippedColor : cardColor);
+                    return false;
+                }
+            });
+
+        }
+    }
+	}
+}
+```
+
+CSharp is much more concise...  
+Anonymous delegates or lambda ft (this is [coming in Java 8](http://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html)). 
+Android's view out of the box won't let you have these wretched cross layer dependencies.
+
+#### Qt: QML and C++
+
+Soon
+
+#### Laravel: Blade (template) and PHP
+
+
 
 
 
