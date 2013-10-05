@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Cohesive : WIP Comparison of modern javascript application architecture: debunking the &quot;heavy view&quot; myth floating about with regards to AngularJS to help the interested digest its paradigm shift " />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Cohesive</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/bradgearon/Cohesive">View on GitHub</a>
+
+          <h1 id="project_title">Cohesive</h1>
+          <h2 id="project_tagline">WIP Comparison of modern javascript application architecture: debunking the &quot;heavy view&quot; myth floating about with regards to AngularJS to help the interested digest its paradigm shift </h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/bradgearon/Cohesive/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/bradgearon/Cohesive/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="dom-element-behaviour" class="anchor" href="#dom-element-behaviour"><span class="octicon octicon-link"></span></a>DOM Element Behaviour</h1>
+
+<h2>
+<a name="coupled-or-cohesive" class="anchor" href="#coupled-or-cohesive"><span class="octicon octicon-link"></span></a>Coupled or Cohesive</h2>
+
+<h3>
+<a name="the-problem" class="anchor" href="#the-problem"><span class="octicon octicon-link"></span></a>The Problem</h3>
+
+<p>Consider the following:</p>
+
+<pre><code>App.prototype.init = function() {
+    var exampleView = new ExampleView($('.js-example'));
+}
+</code></pre>
+
+<p>...</p>
+
+<p>When our app starts we find an arbitrary dom element (or elements) using 
+a <em>css class</em> name js-example and use that to create an instance of our ExampleView class.</p>
+
+<pre><code>ExampleView.prototype.createChildren = function() {
+    this.$card = this.$element.find('.js-card');
+    return this;
+};
+</code></pre>
+
+<p>...</p>
+
+<p>We find children using the <em>css class</em> name js-card.</p>
+
+<pre><code>ExampleView.prototype.enable = function() {
+    this.$card
+        .on('click', this.onClickHandler)        
+   this.$card
+        .addClass('flipped');
+};
+</code></pre>
+
+<p>...</p>
+
+<p>Then we add <strong>behaviour</strong> to those dom elements using 
+jquery | zepto | <em>that other framework</em> to bind a function
+to our browser's implementation of the normalized 'click' event.</p>
+
+<pre><code>ExampleView.prototype.onClick = function(e) {
+    this.$card.toggleClass('flipped');
+};
+</code></pre>
+
+<p>What makes this a problem:</p>
+
+<p>Our code is now directly / functionally dependent on our not only our html's structure, 
+but also the names we choose to use in css.<br>
+Keep in mind css is something totally unrelated to behaviour:</p>
+
+<blockquote>
+<p>"a style sheet language used for describing the presentation semantics (the look and formatting) of a document written in a markup language"
+ <a href="http://en.wikipedia.org/wiki/Cascading_Style_Sheets">Wikipedia - CSS</a></p>
+</blockquote>
+
+<p>Our html is separate from this logic intentionally.  Because we want to keep our 
+views logic less and lightweight.  The biggest problem with this: <em>it is not apparent
+to any machine or person at first glance or after uninformed inspection that js-example
+is related to ExampleView 1:1 and js-card is related to it's children</em>. </p>
+
+<p>Furthermore:</p>
+
+<ul>
+<li>traversing the dom tree by the attributes of its nodes is costly; we are required though, 
+to do it to add behaviour</li>
+<li>our html is brittle, its structure is completely coupled if we intend to have functional behaviour</li>
+<li>our markup is intentionally less semantic</li>
+</ul><h3>
+<a name="the-obvious-truth-exposed" class="anchor" href="#the-obvious-truth-exposed"><span class="octicon octicon-link"></span></a>The obvious truth exposed</h3>
+
+<p>In 2002 the idea of unobtrusive javascript was <a href="http://www.kryogenix.org/code/browser/aqlists/">conceived</a>.<br>
+Internet Explorer 6 was on its way becoming the most widely used browser.  It followed little standards 
+and is likely one of the worst web browsers in the short history of the internet.  This idea of 
+unobtrusiveness was developed to mitigate its lack of adherence to standards.  </p>
+
+<p>The <a href="http://en.wikipedia.org/wiki/Unobtrusive_JavaScript">seven identified principles</a> of unobtrusive javascript:</p>
+
+<blockquote>
+<ol>
+<li>Do not make any assumptions: Defensive programming techniques should allow for the possibilities that JavaScript may not run, 
+the browser may not support expected methods, the HTML may have changed, unexpected input devices may be in use and other scripts 
+may either not be present or may be encroaching on the global namespace.</li>
+<li>Find your hooks and relationships, such as IDs and other aspects of the expected HTML.</li>
+<li>Leave traversing individual DOM objects to the experts, such as to the CSS handler built into the browser where possible.</li>
+<li>Understand browsers and users, particularly how they fail, what assumptions they make, and unusual configurations or usages.</li>
+<li>Understand events, including how they 'bubble' and the features of the Event object that is passed to most event handlers.</li>
+<li>Play well with other scripts by avoiding global function and variable names. </li>
+<li>Work for the next developer by using self-explanatory variable and function names, creating logical and readable code, 
+making dependencies obvious, and commenting any code that still might confuse.</li>
+</ol>
+</blockquote>
+
+<h3>
+<a name="the-internet-is-evolving" class="anchor" href="#the-internet-is-evolving"><span class="octicon octicon-link"></span></a>The Internet Is Evolving</h3>
+
+<p>The seven principles defined in 2007 no longer apply.  The web was a much different place and we were writing web pages as 
+parts of a larger web application, tracking state on a server, the now defunct Windows Mobile was our idea of a smartphone, 
+and wap was a relevant term.  The web has changed vastly.  Apple created the iPhone and Google (and its contributors) created Android.<br>
+A few people bought a Windows Phone - which is by no means a similar operating system to its ancestor.  IE6 is finally almost dead, 
+7 is dying, Microsoft has started an open source initiative (the only thing that remains unchanged is the existence of 
+Apple's "Walled Garden"; and shame on them for that).  Most importantly we are writing web <em>applications</em> in one page.<br>
+Business logic is sometimes written exlusively in javascript.  Noone uses type attributes on script tags because no 
+other script language is relevant and thus its not required.  Our smartphones outpower the machines we used in 2007 
+at one tenth the size.  Etc.  </p>
+
+<h4>
+<a name="enough-about-that-about-those-seven-principles" class="anchor" href="#enough-about-that-about-those-seven-principles"><span class="octicon octicon-link"></span></a>Enough about that; about those seven principles:</h4>
+
+<blockquote>
+<ul>
+<li>Do not make any assumptions: Defensive programming techniques should allow for the possibilities that JavaScript may not run, 
+the browser may not support expected methods, the HTML may have changed, unexpected input devices may be in use and other scripts 
+may either not be present or may be encroaching on the global namespace.</li>
+</ul>
+</blockquote>
+
+<p>Javascript not running is no longer relevant.  If it doesn't run we may not have a single page let alone a functional web application.
+The HTML may have changed.  If we are looking for ids, classes, traversing the DOM - pretty much if we have written any js and the HTML 
+changes (especially unexpectedly) said js is going to have to change with it.  Tiny code goblins shouldn't be messing around on github.
+Unexpected input devices may be in use.  This is a fundamental shift and brings us (back) to a very important concept: we no longer 
+write code to support browser differences and likewise hardware differences.  It is the job of the device and its web browser to 
+translate handwriting, speech, keyboard layouts, screen metrics.</p>
+
+<blockquote>
+<ul>
+<li>Find your hooks and relationships, such as IDs and other aspects of the expected HTML.</li>
+<li>Leave traversing individual DOM objects to the experts, such as to the CSS handler built into the browser where possible.</li>
+</ul>
+</blockquote>
+
+<p>Traverse and be merry.  Thou <a href="http://en.wikipedia.org/wiki/Sarcasm">hast plenty of unused cycles and battery cells</a>.  Remember to 
+fully discharge your batteries between charges.  Especially the Lithium ion variety (don't really it will damage them).</p>
+
+<blockquote>
+<ul>
+<li>Understand browsers and users, particularly how they fail, what assumptions they make, and unusual configurations or usages.</li>
+</ul>
+</blockquote>
+
+<p>This should be revised for responsiveness and accessiblity.  We should no longer interpret this as perhaps the user has disabled 
+javascript.  We can add something about whether they have connectivity and / or a gpu with nothing to do.</p>
+
+<blockquote>
+<ul>
+<li>Understand events, including how they 'bubble' and the features of the Event object that is passed to most event handlers.</li>
+</ul>
+</blockquote>
+
+<p>Please don't focus on plumbing code.  The inner workings of events should be the least of your worries.  Basic understanding is still required.</p>
+
+<blockquote>
+<ul>
+<li>Play well with other scripts by avoiding global function and variable names. </li>
+</ul>
+</blockquote>
+
+<p>Has anyone outside of <a href="http://unity3d.com">Unity3D</a> intentionally written code in a global scope for production?  Shame on you.  This still applies.</p>
+
+<blockquote>
+<ul>
+<li>Work for the next developer by using self-explanatory variable and function names, creating logical and readable code, 
+making dependencies obvious, and commenting any code that still might confuse.</li>
+</ul>
+</blockquote>
+
+<p>This most definitely still applies.  But it should be noted that </p>
+
+<pre><code>var exampleView = new ExampleView($('.js-example'));
+</code></pre>
+
+<p>means and explains nothing.  It is also only readable in the context of the document(s) that use it.  Without type safety, compilation, and completely 
+separated - exactly what dependency is obvious to someone working on the document?  It is also not possible to understand the structural dependencies
+that most definitely exist without fully understanding the behaviour.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Cohesive maintained by <a href="https://github.com/bradgearon">bradgearon</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
