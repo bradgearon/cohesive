@@ -24,10 +24,10 @@ ExampleView.prototype.createChildren = function() {
 We find children using the *css class* name js-card.
 
 ```javascript
-	ExampleView.prototype.enable = function() {
-		this.$card.on('click', this.onClickHandler)        
-		this.$card.addClass('flipped');
-	};
+ExampleView.prototype.enable = function() {
+	this.$card.on('click', this.onClickHandler)        
+	this.$card.addClass('flipped');
+};
 ```
 
 Then we add **behaviour** to those dom elements using 
@@ -36,7 +36,7 @@ to our browser's implementation of the normalized 'click' event.
 
 ```javascript
 ExampleView.prototype.onClick = function(e) {
-   this.$card.toggleClass('flipped');
+	this.$card.toggleClass('flipped');
 };
 ```
 
