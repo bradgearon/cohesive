@@ -31,13 +31,7 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h1>
-<a name="dom-element-behaviour" class="anchor" href="#dom-element-behaviour"><span class="octicon octicon-link"></span></a>DOM Element Behaviour</h1>
-
-<h2>
-<a name="coupled-or-cohesive" class="anchor" href="#coupled-or-cohesive"><span class="octicon octicon-link"></span></a>Coupled or Cohesive</h2>
-
-<h3>
+        <h3>
 <a name="the-problem" class="anchor" href="#the-problem"><span class="octicon octicon-link"></span></a>The Problem</h3>
 
 <p>Consider the following:</p>
@@ -73,7 +67,8 @@ to our browser's implementation of the normalized 'click' event.</p>
 <span class="p">};</span>
 </pre></div>
 
-<p>What makes this a problem:</p>
+<h3>
+<a name="what-makes-this-a-problem" class="anchor" href="#what-makes-this-a-problem"><span class="octicon octicon-link"></span></a>What makes this a problem?</h3>
 
 <p>Our code is now directly / functionally dependent on our not only our html's structure, 
 but also the names we choose to use in css.<br>
@@ -97,7 +92,7 @@ to do it to add behaviour</li>
 <li>our html is brittle, its structure is completely coupled if we intend to have functional behaviour</li>
 <li>our markup is intentionally less semantic</li>
 </ul><h3>
-<a name="the-obvious-truth-exposed" class="anchor" href="#the-obvious-truth-exposed"><span class="octicon octicon-link"></span></a>The obvious truth exposed</h3>
+<a name="a-long-time-ago-in-a-land" class="anchor" href="#a-long-time-ago-in-a-land"><span class="octicon octicon-link"></span></a>A long time ago, in a land...</h3>
 
 <p>In 2002 the idea of unobtrusive javascript was <a href="http://www.kryogenix.org/code/browser/aqlists/">conceived</a>.<br>
 Internet Explorer 6 was on its way becoming the most widely used browser.  It followed little standards 
@@ -203,8 +198,8 @@ making dependencies obvious, and commenting any code that still might confuse.</
 separated - exactly what dependency is obvious to someone working on the document?  It is also not possible to understand the structural dependencies
 that most definitely exist without fully understanding the behaviour.</p>
 
-<hr><h3>
-<a name="html-and-js-are-lonely" class="anchor" href="#html-and-js-are-lonely"><span class="octicon octicon-link"></span></a>HTML and js Are Lonely</h3>
+<hr><h4>
+<a name="html-and-javascript-are-lonely" class="anchor" href="#html-and-javascript-are-lonely"><span class="octicon octicon-link"></span></a>HTML and Javascript Are Lonely</h4>
 
 <p>Have you ever written testable, readable, separated code in any other language - in this manner?  Probably (hopefully) not.<br>
 To illustrate this, I've put a few examples together (not exactly the same implementation, but the concepts outlined remain):</p>
@@ -270,6 +265,105 @@ To illustrate this, I've put a few examples together (not exactly the same imple
 </pre></div>
 
 <p>This violates nearly every rule in the book for WPF applications.  It makes no sense.  Rebuttals welcome.</p>
+
+<h4>
+<a name="android-xml-and-java" class="anchor" href="#android-xml-and-java"><span class="octicon octicon-link"></span></a>Android: XML and Java</h4>
+
+<p><a href="http://github.com/bradgearon/cohesive/blob/master/examples/android/res/layout/main.xml">main.xml</a></p>
+
+<div class="highlight highlight-xml"><pre><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="nt">&lt;LinearLayout</span>
+        <span class="na">xmlns:android=</span><span class="s">"http://schemas.android.com/apk/res/android"</span>
+        <span class="na">android:layout_width=</span><span class="s">"fill_parent"</span>
+        <span class="na">android:layout_margin=</span><span class="s">"20dp"</span>
+        <span class="na">android:layout_height=</span><span class="s">"fill_parent"</span>
+        <span class="na">android:id=</span><span class="s">"@id/mainLayout"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;com.example.cohesive_android.StyledView</span> <span class="na">style=</span><span class="s">"@style/Card"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;com.example.cohesive_android.StyledView</span> <span class="na">style=</span><span class="s">"@style/Card"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;com.example.cohesive_android.StyledView</span> <span class="na">style=</span><span class="s">"@style/Card"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/LinearLayout&gt;</span>
+</pre></div>
+
+<p>StyledView extends android.view and exposes the style attribute originally declared.</p>
+
+<p><a href="http://github.com/bradgearon/cohesive/blob/master/examples/android/src/com/example/cohesive_android/Cohesive.java">Cohesive.java</a></p>
+
+<div class="highlight highlight-java"><pre><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">.</span><span class="na">cohesive_android</span><span class="o">;</span>
+
+<span class="c1">// imports left out for brevity</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Cohesive</span> <span class="kd">extends</span> <span class="n">Activity</span> <span class="o">{</span>
+<span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+    <span class="n">setContentView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">main</span><span class="o">);</span>
+
+    <span class="n">Resources</span> <span class="n">themeWrapper</span> <span class="o">=</span> <span class="n">getResources</span><span class="o">();</span>
+
+    <span class="kd">final</span> <span class="kt">int</span> <span class="n">flippedColor</span> <span class="o">=</span> <span class="n">themeWrapper</span><span class="o">.</span><span class="na">getColor</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">color</span><span class="o">.</span><span class="na">Flipped</span><span class="o">);</span>
+    <span class="kd">final</span> <span class="kt">int</span> <span class="n">cardColor</span> <span class="o">=</span> <span class="n">themeWrapper</span><span class="o">.</span><span class="na">getColor</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">color</span><span class="o">.</span><span class="na">Card</span><span class="o">);</span>
+
+    <span class="n">LinearLayout</span> <span class="n">ll</span> <span class="o">=</span> <span class="o">(</span><span class="n">LinearLayout</span><span class="o">)</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">mainLayout</span><span class="o">);</span>
+    <span class="kt">int</span> <span class="n">children</span> <span class="o">=</span> <span class="n">ll</span><span class="o">.</span><span class="na">getChildCount</span><span class="o">();</span>
+
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">children</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+        <span class="n">View</span> <span class="n">view</span> <span class="o">=</span> <span class="n">ll</span><span class="o">.</span><span class="na">getChildAt</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">view</span> <span class="k">instanceof</span> <span class="n">StyledView</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">view</span><span class="o">.</span><span class="na">setOnTouchListener</span><span class="o">(</span><span class="k">new</span> <span class="n">View</span><span class="o">.</span><span class="na">OnTouchListener</span><span class="o">()</span> <span class="o">{</span>
+                <span class="nd">@Override</span>
+                <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">onTouch</span><span class="o">(</span><span class="n">View</span> <span class="n">view</span><span class="o">,</span> <span class="n">android</span><span class="o">.</span><span class="na">view</span><span class="o">.</span><span class="na">MotionEvent</span> <span class="n">motionEvent</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">Drawable</span> <span class="n">background</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="na">getBackground</span><span class="o">();</span>
+                    <span class="kt">int</span> <span class="n">color</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">background</span> <span class="k">instanceof</span> <span class="n">ColorDrawable</span><span class="o">)</span>
+                        <span class="n">color</span> <span class="o">=</span> <span class="o">((</span><span class="n">ColorDrawable</span><span class="o">)</span> <span class="n">background</span><span class="o">).</span><span class="na">getColor</span><span class="o">();</span>
+                    <span class="n">view</span><span class="o">.</span><span class="na">setBackgroundColor</span><span class="o">(</span><span class="n">color</span> <span class="o">==</span> <span class="n">cardColor</span> <span class="o">?</span> <span class="n">flippedColor</span> <span class="o">:</span> <span class="n">cardColor</span><span class="o">);</span>
+                    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">});</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+<p>Side note: CSharp is much more concise... 
+Anonymous delegates, var, and lambda FTW  (the latter is <a href="http://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html">coming in Java 8</a>). </p>
+
+<p>Android's view out of the box won't let you have these wretched cross layer dependencies.</p>
+
+<h4>
+<a name="qt-qml-and-c" class="anchor" href="#qt-qml-and-c"><span class="octicon octicon-link"></span></a>Qt: QML and C++</h4>
+
+<p>Soon</p>
+
+<hr><p>Why would we break a bunch of our own rules for the web, but not for any other language or ui framework?<br>
+Perhaps its the exponentially more difficult (standards) <a href="http://www.ie6countdown.com/">upgrade process</a>.<br>
+Perhaps its because the browser is a choice more so than your choice operating system's ui framework.
+Likely its a combination of those and attempts to commercialize and (naturally) differentiate the browser -
+that spawned from the (ridiculous) idea that one browser could render documents better than the rest; that
+this platform built for collaboration could be corrupted and made proprietary by deliberately ignoring 
+accepted standards and thus be used as a tool to promote <a href="http://windows.microsoft.com">other products</a>.
+Thankfully thats no longer an issue.</p>
+
+<p>Is it still necessary, then, to use so called "defensive programming techniques"?  Must an application written for the
+web pretend it isn't just some client code running inside of another ui framework?  Does that application need to 
+function with or without its interpreter?</p>
+
+<h3>
+<a name="modern-web-applications" class="anchor" href="#modern-web-applications"><span class="octicon octicon-link"></span></a>Modern Web Applications</h3>
+
+<p>So yes, <a href="https://news.ycombinator.com/item?id=5526058">we used to write things like</a></p>
+
+<div class="highlight highlight-html"><pre><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">”#”</span> <span class="na">onclick=</span><span class="s">”doSomething()”</span><span class="nt">&gt;</span>
+</pre></div>
+
+<p>But, everything broke because of commercialism and bad decisions.   So we bent the rules for the web, until we could 
+overcome the bad decisions and came up with the antipattern that is unobtrusive javascript.  Every other ui framework
+realized since then that declaritive markup is a good thing.  </p>
+
+<p>Thus, now that we can - its definitely time to <a href="http://www.localytics.com/blog/2013/angularjs-at-localytics/">move on</a>.</p>
+
+<h4>
+<a name="paradigm-shift--dom-elements-inherently-have-behaviour-even-more-in-html5" class="anchor" href="#paradigm-shift--dom-elements-inherently-have-behaviour-even-more-in-html5"><span class="octicon octicon-link"></span></a>Paradigm Shift;  DOM Elements Inherently have Behaviour (even more in HTML5)</h4>
       </section>
     </div>
 
