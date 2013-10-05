@@ -146,7 +146,7 @@ To illustrate this, I've put a few examples together (not exactly the same imple
 
 #### WPF: Xaml and C#
 
-[MainWindow.xaml](examples/xaml/MainWindow.xaml)
+[MainWindow.xaml](http://github.com/bradgearon/cohesive/blob/master/examples/xaml/MainWindow.xaml)
 
 ```xml 
 <Window x:Class="SeparationOfConcerns.MainWindow"
@@ -166,7 +166,7 @@ To illustrate this, I've put a few examples together (not exactly the same imple
 </Window>
 ```
 
-[MainWindow.xaml.cs](examples/xaml/MainWindow.xaml.cs)
+[MainWindow.xaml.cs](http://github.com/bradgearon/cohesive/blob/master/examples/xaml/MainWindow.xaml.cs)
 
 ```cs
 using System.Windows;
