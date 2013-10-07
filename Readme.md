@@ -271,7 +271,94 @@ Android's view out of the box won't let you have these wretched cross layer depe
 
 #### Qt: QML and C++
 
-Soon
+[main.xml](http://github.com/bradgearon/cohesive/blob/master/examples/qt/cohesive/mainwindow.ui)
+
+```xml 
+<?xml version="1.0" encoding="utf-8"?>
+<ui version="4.0">
+  <class>MainWindow</class>
+  <widget class="QMainWindow" name="MainWindow">
+    <widget class="QWidget" name="centralWidget">
+      <widget class="HoverPushButton" name="pushbutton">
+	    <property name="className" stdset="0">
+		  <string>Card</string>
+		</property>
+	  </widget>
+	</widget>
+  </widget>
+</ui>
+```
+
+Note only the important markup is included for brevity.
+
+[mainwindow.cpp](http://github.com/bradgearon/cohesive/blob/master/examples/qt/cohesive/mainwindow.cpp)
+
+```cpp
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
+{
+    ui->setupUi(this);
+
+    QObjectList children = ui->centralWidget->children();
+    int childCount = children.count();
+
+    foreach(QObject* child, children) {
+        QVariant className = child->property("className");
+        if(className == "Card") {
+            connect(child, SIGNAL(onHover(QEvent*, bool, QObject*)), 
+				this, SLOT(OnCardHover(QEvent*, bool, QObject*)));
+        }
+    }
+}
+
+void MainWindow::OnCardHover(QEvent *event, bool hover, QObject* sender) {
+    QPushButton* b = (QPushButton*) sender;
+    b->setProperty("className", hover ? "Flipped" : "Card");
+    this->setStyleSheet(this->styleSheet());
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+```
+
+[mainwindow.h](http://github.com/bradgearon/cohesive/blob/master/examples/qt/cohesive/mainwindow.h)
+
+```cpp
+public slots:
+    void OnCardHover(QEvent *event, bool hover, QObject* sender);
+};
+```
+
+The slot exposed for the hover event.
+
+[hoverpushbutton.h](http://github.com/bradgearon/cohesive/blob/master/examples/qt/cohesive/hoverpushbutton.h)
+
+```cpp
+private:
+    void enterEvent(QEvent *event);
+    void leaveEvent(QEvent *event);
+signals:
+    void onHover(QEvent *event, bool hover, QObject* sender);
+```
+
+Override the enter/leave Event functions.  Defines a signal for the main window to connect to (basically an event handler for those unfamiliar with signals/slots).
+
+[hoverpushbutton.cpp](http://github.com/bradgearon/cohesive/blob/master/examples/qt/cohesive/hoverpushbutton.cpp)
+
+```cpp
+void HoverPushButton::enterEvent(QEvent *event) {
+    emit onHover(event, true, this);
+}
+
+void HoverPushButton::leaveEvent(QEvent *event) {
+    emit onHover(event, false, this);
+}
+```
+
+Implementation simply emits the signal with true or false based on hover...  
+Normally one would use psuedo tracking states in the qt stylesheet (to change the style) or simply use the HoverPushButton class if that behavior was supossed to be implemented.
+The latter could be thought of as similar to a directive (in Angular).  Something I'll cover more later.
 
 ---------
 
