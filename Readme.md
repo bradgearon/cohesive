@@ -304,8 +304,7 @@ Thus, now that we can - its definitely time to [move on](http://www.localytics.c
 
 #### Paradigm Shift;  DOM Elements Inherently have Behaviour (even more in HTML5)
 
-
-
+Soon
 
 
 
