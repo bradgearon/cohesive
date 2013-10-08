@@ -333,7 +333,89 @@ Anonymous delegates, var, and lambda FTW  (the latter is <a href="http://docs.or
 <h4>
 <a name="qt-qml-and-c" class="anchor" href="#qt-qml-and-c"><span class="octicon octicon-link"></span></a>Qt: QML and C++</h4>
 
-<p>Soon</p>
+<p><a href="http://github.com/bradgearon/cohesive/blob/master/examples/qt/cohesive/mainwindow.ui">main.xml</a></p>
+
+<div class="highlight highlight-xml"><pre><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="nt">&lt;ui</span> <span class="na">version=</span><span class="s">"4.0"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;class&gt;</span>MainWindow<span class="nt">&lt;/class&gt;</span>
+  <span class="nt">&lt;widget</span> <span class="na">class=</span><span class="s">"QMainWindow"</span> <span class="na">name=</span><span class="s">"MainWindow"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;widget</span> <span class="na">class=</span><span class="s">"QWidget"</span> <span class="na">name=</span><span class="s">"centralWidget"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;widget</span> <span class="na">class=</span><span class="s">"HoverPushButton"</span> <span class="na">name=</span><span class="s">"pushbutton"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"className"</span> <span class="na">stdset=</span><span class="s">"0"</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;string&gt;</span>Card<span class="nt">&lt;/string&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+      <span class="nt">&lt;/widget&gt;</span>
+    <span class="nt">&lt;/widget&gt;</span>
+  <span class="nt">&lt;/widget&gt;</span>
+<span class="nt">&lt;/ui&gt;</span>
+</pre></div>
+
+<p>Note only the important markup is included for brevity.</p>
+
+<p><a href="http://github.com/bradgearon/cohesive/blob/master/examples/qt/cohesive/mainwindow.cpp">mainwindow.cpp</a></p>
+
+<div class="highlight highlight-cpp"><pre><span class="n">MainWindow</span><span class="o">::</span><span class="n">MainWindow</span><span class="p">(</span><span class="n">QWidget</span> <span class="o">*</span><span class="n">parent</span><span class="p">)</span> <span class="o">:</span> <span class="n">QMainWindow</span><span class="p">(</span><span class="n">parent</span><span class="p">),</span> <span class="n">ui</span><span class="p">(</span><span class="k">new</span> <span class="n">Ui</span><span class="o">::</span><span class="n">MainWindow</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">ui</span><span class="o">-&gt;</span><span class="n">setupUi</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+
+    <span class="n">QObjectList</span> <span class="n">children</span> <span class="o">=</span> <span class="n">ui</span><span class="o">-&gt;</span><span class="n">centralWidget</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">();</span>
+    <span class="kt">int</span> <span class="n">childCount</span> <span class="o">=</span> <span class="n">children</span><span class="p">.</span><span class="n">count</span><span class="p">();</span>
+
+    <span class="n">foreach</span><span class="p">(</span><span class="n">QObject</span><span class="o">*</span> <span class="n">child</span><span class="p">,</span> <span class="n">children</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">QVariant</span> <span class="n">className</span> <span class="o">=</span> <span class="n">child</span><span class="o">-&gt;</span><span class="n">property</span><span class="p">(</span><span class="s">"className"</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">className</span> <span class="o">==</span> <span class="s">"Card"</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">connect</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">SIGNAL</span><span class="p">(</span><span class="n">onHover</span><span class="p">(</span><span class="n">QEvent</span><span class="o">*</span><span class="p">,</span> <span class="kt">bool</span><span class="p">,</span> <span class="n">QObject</span><span class="o">*</span><span class="p">)),</span> 
+                <span class="k">this</span><span class="p">,</span> <span class="n">SLOT</span><span class="p">(</span><span class="n">OnCardHover</span><span class="p">(</span><span class="n">QEvent</span><span class="o">*</span><span class="p">,</span> <span class="kt">bool</span><span class="p">,</span> <span class="n">QObject</span><span class="o">*</span><span class="p">)));</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">MainWindow</span><span class="o">::</span><span class="n">OnCardHover</span><span class="p">(</span><span class="n">QEvent</span> <span class="o">*</span><span class="n">event</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">hover</span><span class="p">,</span> <span class="n">QObject</span><span class="o">*</span> <span class="n">sender</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">QPushButton</span><span class="o">*</span> <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="n">QPushButton</span><span class="o">*</span><span class="p">)</span> <span class="n">sender</span><span class="p">;</span>
+    <span class="n">b</span><span class="o">-&gt;</span><span class="n">setProperty</span><span class="p">(</span><span class="s">"className"</span><span class="p">,</span> <span class="n">hover</span> <span class="o">?</span> <span class="s">"Flipped"</span> <span class="o">:</span> <span class="s">"Card"</span><span class="p">);</span>
+    <span class="k">this</span><span class="o">-&gt;</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">styleSheet</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="n">MainWindow</span><span class="o">::~</span><span class="n">MainWindow</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">delete</span> <span class="n">ui</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<p><a href="http://github.com/bradgearon/cohesive/blob/master/examples/qt/cohesive/mainwindow.h">mainwindow.h</a></p>
+
+<div class="highlight highlight-cpp"><pre><span class="k">public</span> <span class="n">slots</span><span class="o">:</span>
+    <span class="kt">void</span> <span class="n">OnCardHover</span><span class="p">(</span><span class="n">QEvent</span> <span class="o">*</span><span class="n">event</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">hover</span><span class="p">,</span> <span class="n">QObject</span><span class="o">*</span> <span class="n">sender</span><span class="p">);</span>
+<span class="p">};</span>
+</pre></div>
+
+<p>The slot exposed for the hover event.</p>
+
+<p><a href="http://github.com/bradgearon/cohesive/blob/master/examples/qt/cohesive/hoverpushbutton.h">hoverpushbutton.h</a></p>
+
+<div class="highlight highlight-cpp"><pre><span class="nl">private:</span>
+    <span class="kt">void</span> <span class="nf">enterEvent</span><span class="p">(</span><span class="n">QEvent</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">leaveEvent</span><span class="p">(</span><span class="n">QEvent</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
+<span class="nl">signals:</span>
+    <span class="kt">void</span> <span class="nf">onHover</span><span class="p">(</span><span class="n">QEvent</span> <span class="o">*</span><span class="n">event</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">hover</span><span class="p">,</span> <span class="n">QObject</span><span class="o">*</span> <span class="n">sender</span><span class="p">);</span>
+</pre></div>
+
+<p>Override the enter/leave Event functions.  Defines a signal for the main window to connect to (basically an event handler for those unfamiliar with signals/slots).</p>
+
+<p><a href="http://github.com/bradgearon/cohesive/blob/master/examples/qt/cohesive/hoverpushbutton.cpp">hoverpushbutton.cpp</a></p>
+
+<div class="highlight highlight-cpp"><pre><span class="kt">void</span> <span class="n">HoverPushButton</span><span class="o">::</span><span class="n">enterEvent</span><span class="p">(</span><span class="n">QEvent</span> <span class="o">*</span><span class="n">event</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">emit</span> <span class="n">onHover</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">HoverPushButton</span><span class="o">::</span><span class="n">leaveEvent</span><span class="p">(</span><span class="n">QEvent</span> <span class="o">*</span><span class="n">event</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">emit</span> <span class="n">onHover</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>Implementation simply emits the signal with true or false based on hover...<br>
+Normally one would use psuedo tracking states in the qt stylesheet (to change the style) or simply use the HoverPushButton class if that behavior was supossed to be implemented.
+The latter could be thought of as similar to a directive (in Angular).  Something I'll cover more later.</p>
 
 <hr><p>Why would we break a bunch of our own rules for the web, but not for any other language or ui framework?<br>
 Perhaps its the exponentially more difficult (standards) <a href="http://www.ie6countdown.com/">upgrade process</a>.<br>
